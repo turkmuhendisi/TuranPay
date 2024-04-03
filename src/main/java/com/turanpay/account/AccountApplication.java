@@ -11,11 +11,11 @@ import java.util.Set;
 
 @SpringBootApplication
 public class AccountApplication implements CommandLineRunner {
-	private CustomerRepository customerRepository;
+	/*private CustomerRepository customerRepository;
 
     public AccountApplication(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-    }
+    }*/
 
     public static void main(String[] args) {
 		SpringApplication.run(AccountApplication.class, args);
@@ -23,7 +23,8 @@ public class AccountApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Customer customer = customerRepository.save(
+		//Test Customer
+		/*Customer customer = customerRepository.save(
 				new Customer("",
 						"Berat",
 						"Koca",
@@ -31,6 +32,6 @@ public class AccountApplication implements CommandLineRunner {
 						"05556549878",
 						"password123!",
 						new HashSet<>()));
-		System.out.println(customer);
+		System.out.println(customer);*/
 	}
 }

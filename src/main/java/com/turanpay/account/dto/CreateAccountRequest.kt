@@ -6,7 +6,5 @@ import java.math.BigDecimal
 
 data class CreateAccountRequest(
     @field:NotBlank
-    val customerId: String,
-    @field:Min(0)
-    val initialCredit: BigDecimal
+    val customerId: String
 )

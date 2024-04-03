@@ -30,14 +30,15 @@ public class AccountService {
         Customer customer = customerService.findCustomerById(createAccountRequest.getCustomerId());
         Account account = new Account(
                 customer,
-                createAccountRequest.getInitialCredit(),
+                BigDecimal.ZERO,
                 LocalDateTime.now());
 
-        if (createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0) {
-            Transaction transaction = new Transaction(createAccountRequest.getInitialCredit(), account);
+        //if (createAccountRequest.getInitialCredit().compareTo(BigDecimal.ZERO) > 0) {
+            Transaction transaction = new Transaction(BigDecimal.ZERO, account);
             account.getTransaction().add(transaction);
-        }
+        //}
 
         return converter.convert(accountRepository.save(account));
     }
+
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 data class TransactionDto(
     val id: String?,
-    val transactionType: TransactionType? = TransactionType.INITIAL,
+    val transactionType: TransactionType?,
     val amount: BigDecimal? = BigDecimal.ZERO,
     val transactionDate: LocalDateTime?
 )

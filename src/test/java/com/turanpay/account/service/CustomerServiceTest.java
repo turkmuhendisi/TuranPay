@@ -9,7 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,17 +23,19 @@ public class CustomerServiceTest {
     private CustomerService service;
     private CustomerRepository customerRepository;
     private CustomerDtoConverter converter;
+    private BCryptPasswordEncoder passwordEncoder;
+    private JwtService jwtService;
 
     @BeforeEach
     public void setUp() {
         customerRepository = mock(CustomerRepository.class);
         converter = mock(CustomerDtoConverter.class);
-        service = new CustomerService(customerRepository, converter);
+        service = new CustomerService(customerRepository, converter, passwordEncoder, jwtService);
     }
 
     @Test
     public void testFindByCustomerId_whenCustomerIdExists_shouldReturnCustomer() {
-        Customer customer = new Customer("id", "name", "surname", "email", "phone", "password", Set.of());
+        Customer customer = new Customer("id", "name", "surname", "email", "phone", "password", Set.of(), LocalDateTime.now(), Set.of());
 
         Mockito.when(customerRepository.findById("id")).thenReturn(Optional.of(customer));
 
@@ -49,7 +53,7 @@ public class CustomerServiceTest {
 
     @Test
     public void testGetCustomerById_whenCustomerIdExists_shouldReturnCustomer() {
-        Customer customer = new Customer("id", "name", "surname", "email", "phone", "password", Set.of());
+        Customer customer = new Customer("id", "name", "surname", "email", "phone", "password", Set.of(), LocalDateTime.now(), Set.of());
         CustomerDto customerDto = new CustomerDto("id", "name", "surname","email","phone", Set.of());
 
         Mockito.when(customerRepository.findById("id")).thenReturn(Optional.of(customer));

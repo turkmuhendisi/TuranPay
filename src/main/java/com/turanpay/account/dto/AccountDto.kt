@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 
 data class AccountDto(
     val id: String?,
+    val accountNumber: String?,
+    val IBAN: String?,
     val balance: BigDecimal? = BigDecimal.ZERO,
     val creationDate: LocalDateTime,
     val customer: AccountCustomerDto?,

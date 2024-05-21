@@ -11,7 +11,9 @@ data class Account(
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     val id: String?,
-    val balance: BigDecimal? = BigDecimal.ZERO,
+    val accountNumber: String?,
+    val IBAN: String?,
+    var balance: BigDecimal? = BigDecimal.ZERO,
     val creationDate: LocalDateTime?,
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
@@ -21,8 +23,10 @@ data class Account(
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val transaction: Set<Transaction> = HashSet()
 ) {
-    constructor(customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
+    constructor(accountNumber: String, iban: String, customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
         "",
+        accountNumber = accountNumber,
+        IBAN = iban,
         customer = customer,
         balance = balance,
         creationDate = creationDate

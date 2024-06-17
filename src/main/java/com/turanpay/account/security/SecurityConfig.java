@@ -42,8 +42,9 @@ public class SecurityConfig {
                                 "/auth/customer-register/**",
                                 "/auth/generateToken/**",
                                 "/auth/create-account/**",
-                                "/auth/iban/**").permitAll()
-                        .requestMatchers("/auth/user/**", "/auth/profile/**").hasRole("USER")
+                                "/auth/iban/**",
+                                "/api/upload/**").permitAll()
+                        .requestMatchers("/auth/user/**", "/auth/profile/**", "/auth/deposit/**").hasRole("USER")
                         .requestMatchers("/auth/admin/**").hasRole("ADMIN")
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

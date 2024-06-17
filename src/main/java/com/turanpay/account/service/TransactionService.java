@@ -70,7 +70,7 @@ public class TransactionService {
             CustomerDto customer = customerService.findUserByJwt(token);
             Account senderAccount = accountService.getAccountByCustomerId(customer.getId());
 
-            // Which account?
+            // From account
 
             Transaction transaction = new Transaction(
                     newBalance,

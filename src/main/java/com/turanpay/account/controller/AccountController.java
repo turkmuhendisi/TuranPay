@@ -2,9 +2,7 @@ package com.turanpay.account.controller;
 
 import com.turanpay.account.dto.AccountDto;
 import com.turanpay.account.dto.CreateAccountRequest;
-import com.turanpay.account.service.AccountNumberGenerator;
 import com.turanpay.account.service.AccountService;
-import com.turanpay.account.service.IBANGenerator;
 import com.turanpay.account.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

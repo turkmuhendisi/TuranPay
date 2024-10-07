@@ -1,7 +1,6 @@
 package com.turanpay.account.model
 
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
 import java.util.*
 
 @Entity

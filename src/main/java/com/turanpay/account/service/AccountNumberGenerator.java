@@ -5,7 +5,6 @@ import com.turanpay.account.repository.SequenceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class AccountNumberGenerator {
 

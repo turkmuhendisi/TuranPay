@@ -2,7 +2,6 @@ package com.turanpay.account.service;
 
 import com.turanpay.account.dto.CustomerDto;
 import com.turanpay.account.model.Account;
-import com.turanpay.account.model.Customer;
 import com.turanpay.account.model.Transaction;
 import com.turanpay.account.repository.AccountRepository;
 import com.turanpay.account.repository.TransactionRepository;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -31,7 +31,7 @@ public class TransactionService {
             throw new IllegalArgumentException("Customer not found with ID " + customerId);
         }
 
-        Account account = accountRepository.findAccountByCustomerId(customer.getId());
+        Account account = accountRepository.findAccountByCustomerId(UUID.fromString(customer.getId()));
         BigDecimal currentBalance = account.getBalance();
         BigDecimal newBalance = Objects.requireNonNull(currentBalance).add(amount);
 
@@ -45,7 +45,7 @@ public class TransactionService {
             throw new IllegalArgumentException("Customer not found with ID " + customerId);
         }
 
-        Account account = accountRepository.findAccountByCustomerId(customer.getId());
+        Account account = accountRepository.findAccountByCustomerId(UUID.fromString(customer.getId()));
         BigDecimal currentBalance = account.getBalance();
         if (Objects.requireNonNull(currentBalance).compareTo(amount) < 0) {
             throw new IllegalArgumentException("Insufficient balance in account for customer ID " + customerId);
@@ -74,7 +74,7 @@ public class TransactionService {
 
             Transaction transaction = new Transaction(
                     newBalance,
-                    Objects.requireNonNull(receiverAccount.getId()),
+                    Objects.requireNonNull(String.valueOf(receiverAccount.getId())),
                     senderAccount);
 
             transactionRepository.save(transaction);

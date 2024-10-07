@@ -3,6 +3,7 @@ package com.turanpay.account.dto;
 import com.turanpay.account.model.Account;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,8 +22,8 @@ public class AccountDtoConverter {
                 from.getAccountNumber(),
                 from.getIBAN(),
                 from.getBalance(),
-                from.getCreationDate(),
-                customerDtoConverter.convertToAccountCustomerDto(from.getCustomer()),
+                Objects.requireNonNull(from.getCreationDate()),
+                customerDtoConverter.convertToAccountCustomerDto(Objects.requireNonNull(from.getCustomer())),
                 from.getTransaction().stream().map(transactionDtoConverter::convert).collect(Collectors.toSet()));
     }
 }

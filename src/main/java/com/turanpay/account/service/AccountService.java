@@ -3,16 +3,14 @@ package com.turanpay.account.service;
 import com.turanpay.account.dto.AccountDto;
 import com.turanpay.account.dto.AccountDtoConverter;
 import com.turanpay.account.dto.CreateAccountRequest;
-import com.turanpay.account.dto.CustomerDto;
 import com.turanpay.account.model.Account;
 import com.turanpay.account.model.Customer;
 import com.turanpay.account.repository.AccountRepository;
-import com.turanpay.account.repository.SequenceRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -57,6 +55,6 @@ public class AccountService {
     }
 
     public Account getAccountByCustomerId(String customerId) {
-        return accountRepository.findAccountByCustomerId(customerId);
+        return accountRepository.findAccountByCustomerId(UUID.fromString(customerId));
     }
 }

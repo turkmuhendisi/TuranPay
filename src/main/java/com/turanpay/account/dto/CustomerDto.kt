@@ -1,10 +1,12 @@
 package com.turanpay.account.dto
 
+import java.util.*
+
 data class CustomerDto(
-    val id: String,
+    val id: UUID,
     val name: String,
     val surname: String,
     val email: String,
     val phone: String,
-    val accounts: Set<CustomerAccountDto>
+    val accounts: MutableSet<CustomerAccountDto>
 )

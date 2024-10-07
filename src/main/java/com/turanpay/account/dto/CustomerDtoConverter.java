@@ -3,6 +3,7 @@ package com.turanpay.account.dto;
 import com.turanpay.account.model.Customer;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -15,18 +16,18 @@ public class CustomerDtoConverter {
 
     public AccountCustomerDto convertToAccountCustomerDto(Customer from) {
         return new AccountCustomerDto(
-                from.getId(),
-                from.getName(),
-                from.getSurname());
+                Objects.requireNonNull(from.getId()),
+                Objects.requireNonNull(from.getName()),
+                Objects.requireNonNull(from.getSurname()));
     }
 
     public CustomerDto convertToCustomerDto(Customer from) {
         return new CustomerDto(
-                from.getId(),
-                from.getName(),
-                from.getSurname(),
-                from.getEmail(),
-                from.getPhone(),
-                from.getAccounts().stream().map(converter::convert).collect(Collectors.toSet()));
+                Objects.requireNonNull(from.getId()),
+                Objects.requireNonNull(from.getName()),
+                Objects.requireNonNull(from.getSurname()),
+                Objects.requireNonNull(from.getEmail()),
+                Objects.requireNonNull(from.getPhone()),
+                Objects.requireNonNull(from.getAccounts()).stream().map(converter::convert).collect(Collectors.toSet()));
     }
 }

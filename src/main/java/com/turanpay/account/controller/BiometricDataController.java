@@ -3,7 +3,6 @@ package com.turanpay.account.controller;
 import com.turanpay.account.config.FTPUtils;
 import com.turanpay.account.dto.FaceVerificationRequest;
 import com.turanpay.account.model.BiometricData;
-import com.turanpay.account.repository.BiometricDataRepository;
 import com.turanpay.account.service.BiometricDataService;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +17,10 @@ import java.util.*;
 @RequestMapping("/api")
 public class BiometricDataController {
     private final BiometricDataService biometricDataService;
-    private final BiometricDataRepository biometricDataRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public BiometricDataController(BiometricDataService biometricDataService, BiometricDataRepository biometricDataRepository) {
+    public BiometricDataController(BiometricDataService biometricDataService) {
         this.biometricDataService = biometricDataService;
-        this.biometricDataRepository = biometricDataRepository;
     }
 
     @PostMapping("/uploadImage")

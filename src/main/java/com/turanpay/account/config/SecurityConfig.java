@@ -1,5 +1,6 @@
-package com.turanpay.account.security;
+package com.turanpay.account.config;
 
+import com.turanpay.account.security.JwtAuthFilter;
 import com.turanpay.account.service.CustomerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,8 @@ public class SecurityConfig {
                                 "/auth/generateToken/**",
                                 "/auth/create-account/**",
                                 "/auth/iban/**",
-                                "/api/upload/**").permitAll()
+                                "/api/uploadImage/**",
+                                "/api/validate-face/**").permitAll()
                         .requestMatchers("/auth/user/**", "/auth/profile/**", "/auth/deposit/**").hasRole("USER")
                         .requestMatchers("/auth/admin/**").hasRole("ADMIN")
                 )

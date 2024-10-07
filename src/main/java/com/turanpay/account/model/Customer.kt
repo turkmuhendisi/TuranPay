@@ -1,15 +1,15 @@
 package com.turanpay.account.model
 
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.HashSet
 
 @Entity
 data class Customer(
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    val id: String?,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: UUID? = null,
     val name: String?,
     val surname: String?,
     val email: String?,
@@ -29,7 +29,7 @@ data class Customer(
 ) {
 
     constructor(name: String, surname: String, email: String, phone: String, password: String, creationDate: LocalDateTime) : this(
-        "",
+        null,
         name,
         surname,
         email,

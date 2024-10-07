@@ -1,18 +1,17 @@
 package com.turanpay.account.controller;
 
-import com.turanpay.account.dto.BiometricDataRequest;
+import com.turanpay.account.config.FTPUtils;
+import com.turanpay.account.dto.FaceVerificationRequest;
 import com.turanpay.account.model.BiometricData;
 import com.turanpay.account.repository.BiometricDataRepository;
 import com.turanpay.account.service.BiometricDataService;
-import com.turanpay.account.service.CustomerService;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.util.*;
 
 
 @RestController
@@ -27,35 +26,66 @@ public class BiometricDataController {
         this.biometricDataRepository = biometricDataRepository;
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadBiometricData(@RequestBody BiometricDataRequest request) {
+    @PostMapping("/uploadImage")
+    public ResponseEntity<String> uploadImage(
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("customerId") String customerId) {
+
+        String ftpDir = "/tpay_face_images";
+
         try {
-            BiometricData biometricData = new BiometricData(request.getMobileCam(), request.getCustomerId());
-            biometricDataRepository.save(biometricData);
-            return ResponseEntity.ok("Biometric data saved successfully.");
+            // Geçici dosyayı oluştur
+            File tempFile = File.createTempFile(customerId, image.getOriginalFilename());
+            image.transferTo(tempFile);
+
+            // FTP'ye yükle
+            FTPUtils.uploadFileToFtp(
+                    tempFile,
+                    ftpDir,
+                    customerId
+            );
+            // Geçici dosyayı sil
+            tempFile.delete();
+            // URL'yi veritabanına kaydet
+            String imageUrl = "http://localhost/tpay_face_images/" + customerId + image.getOriginalFilename();
+            biometricDataService.saveImageUrlToDatabase(customerId, imageUrl);
+
+            return ResponseEntity.ok("URL başarıyla kaydedildi: " + imageUrl);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error while saving biometric data: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Dosya yükleme başarısız oldu");
         }
     }
 
     @PostMapping("/validate-face")
-    public ResponseEntity<String> validateFace(@RequestBody BiometricDataRequest request) {
+    public ResponseEntity<String> validateFace(@RequestBody FaceVerificationRequest request) {
+        Optional<BiometricData> faceImageOptional = biometricDataService.getCustomerPhotoImageForCustomerId(request.getCustomerId());
 
-        String faceImage = String.valueOf(biometricDataService.getFaceImageForCustomer(request.getCustomerId()));
+        if (faceImageOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
-        Map<String, String> data = new HashMap<>();
-        data.put("mobileCam", request.getMobileCam());
-        data.put("faceImage", faceImage);
+        BiometricData faceImage = faceImageOptional.get();
+
+        // Verileri JSON formatında göndermek için bir Map oluştur
+        Map<String, Object> data = new HashMap<>();
+        data.put("referenceImage", faceImage.getFaceImage());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(data, headers);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(data, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                "http://localhost:8000/process-image",
-                entity,
-                String.class);
+        ResponseEntity<String> response;
+        try {
+            response = restTemplate.postForEntity(
+                    "http://10.196.136.255:8000/process-image",
+                    entity,
+                    String.class);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error during image processing: " + e.getMessage());
+        }
 
         return response;
     }

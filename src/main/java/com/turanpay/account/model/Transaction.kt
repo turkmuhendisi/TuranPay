@@ -1,17 +1,16 @@
 package com.turanpay.account.model
 
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
 
 
 @Entity
 data class Transaction(
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    val id: String?,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: UUID? = null,
     val transactionType: TransactionType? = TransactionType.INITIAL,
     val amount: BigDecimal?,
     val receiver: String?,

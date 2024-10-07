@@ -1,16 +1,16 @@
 package com.turanpay.account.model
 
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.HashSet
 
 @Entity
 data class Account(
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    val id: String?,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: UUID? = null,
     val accountNumber: String?,
     val IBAN: String?,
     var balance: BigDecimal? = BigDecimal.ZERO,
@@ -24,7 +24,7 @@ data class Account(
     val transaction: Set<Transaction> = HashSet()
 ) {
     constructor(accountNumber: String, iban: String, customer: Customer, balance: BigDecimal, creationDate: LocalDateTime) : this(
-        "",
+        null,
         accountNumber = accountNumber,
         IBAN = iban,
         customer = customer,
